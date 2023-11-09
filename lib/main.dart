@@ -1,4 +1,4 @@
-import 'package:do_it/home_screen.dart';
+import 'package:do_it/screens/home_screen.dart';
 import 'package:do_it/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -1,4 +1,5 @@
-import 'package:do_it/settings_screen.dart';
+import 'package:do_it/screens/add_task_screen.dart';
+import 'package:do_it/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -64,7 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const AddTaskScreen()));
+        },
         child: const Icon(Icons.add),
       ),
       drawer: NavigationDrawer(
@@ -81,6 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Text('finish all and enjoy')
             ],
           ))),
+          ListTile(
+            onTap: () {},
+            // leading: const Icon(Icons),
+            title: const Text('Today'),
+          ),
           ListTile(
             onTap: () {},
             leading: const Icon(Icons.add),
