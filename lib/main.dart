@@ -1,3 +1,4 @@
+import 'package:do_it/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatefulWidget {
@@ -10,9 +11,12 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Do It',
-      home: Placeholder(),
+      home: const HomeScreen(),
+      theme: ThemeData(
+        useMaterial3: true,
+      ),
     );
   }
 }
