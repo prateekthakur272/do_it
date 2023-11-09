@@ -1,34 +1,30 @@
-import 'package:do_it/main.dart';
+import 'package:do_it/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool themeSwitch = false;
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-      ),
-      body: ListView(
-        children: [
-          SwitchListTile(
-            value: themeSwitch,
-            onChanged: (value) {
-              setState(() {
-                themeSwitch = !themeSwitch;
-              });
-            },
-            title: const Text('Dark Theme'),
-            subtitle: Text(themeSwitch?'Enabled':'Disabled'),
-          )
-        ],
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Settings'),
+        ),
+        body: ListView(
+          children: [
+            SwitchListTile(
+              value: Provider.of<ThemeProvider>(context).isDark,
+              onChanged: (value) {
+                Provider.of<ThemeProvider>(context, listen: false).changeTheme();
+              },
+              title: const Text('Dark Theme'),
+              subtitle: Text(Provider.of<ThemeProvider>(context).isDark?'Enabled':'Disabled'),
+            ),
+          ],
+        ),
       ),
     );
   }
