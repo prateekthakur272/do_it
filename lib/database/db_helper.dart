@@ -49,4 +49,12 @@ class DatabaseHelper {
     }
     return -1;
   }
+
+  static Future<int> deleteTask(Task task) async {
+    final db = await _instance;
+    if (db.isOpen) {
+      return await db.delete(taskTableName, where: '$taskColumnId = ?', whereArgs: [taskColumnId]);
+    }
+    return 0;
+  }
 }
