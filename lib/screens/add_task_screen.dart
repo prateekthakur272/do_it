@@ -1,3 +1,5 @@
+import 'package:do_it/database/db_helper.dart';
+import 'package:do_it/models/task.dart';
 import 'package:flutter/material.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -22,13 +24,20 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           },
         ),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.done))
+          IconButton(onPressed: (){
+            if(title.text.trim().isNotEmpty && description.text.trim().isNotEmpty){
+              final task = Task(title.text.trim(), description.text.trim(), TaskStatus.pending);
+              DatabaseHelper.addTask(task).then((value){
+                Navigator.pop(context);
+              });
+            }
+          }, icon: const Icon(Icons.done))
         ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          const Text('List Name',
+          const Text('Keep yourself reminded about',
               style: TextStyle(
                 fontSize: 20,
               )),

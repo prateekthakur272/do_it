@@ -1,6 +1,9 @@
+import 'package:do_it/models/task.dart';
 import 'package:do_it/screens/add_task_screen.dart';
 import 'package:do_it/screens/settings_screen.dart';
 import 'package:flutter/material.dart';
+
+import '../database/db_helper.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,12 +18,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Do It'),
-        // leading: IconButton(
-        //   onPressed: () {
-        //
-        //   },
-        //   icon: const Icon(Icons.list_alt_rounded),
-        // ),
         actions: [
           IconButton(
               onPressed: () {
@@ -33,36 +30,37 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: const Icon(Icons.settings))
         ],
       ),
-      body: ListView(
-        children: [
-          CheckboxListTile(
-            value: true,
-            onChanged: (value) {},
-            controlAffinity: ListTileControlAffinity.leading,
-            isThreeLine: true,
-            title: const Text('Title'),
-            subtitle: const Text(
-                'Description is Description is Description is Description is Description is Description is.'),
-          ),
-          CheckboxListTile(
-            value: true,
-            onChanged: (value) {},
-            controlAffinity: ListTileControlAffinity.leading,
-            isThreeLine: true,
-            title: const Text('Title'),
-            subtitle: const Text(
-                'Description is Description is Description is Description is Description is Description is.'),
-          ),
-          CheckboxListTile(
-            value: true,
-            onChanged: (value) {},
-            controlAffinity: ListTileControlAffinity.leading,
-            isThreeLine: true,
-            title: const Text('Title'),
-            subtitle: const Text(
-                'Description is Description is Description is Description is Description is Description is.'),
-          )
-        ],
+      body: Center(
+        child: FutureBuilder(
+          future: DatabaseHelper.getTasks(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data!.isEmpty) {
+                return const Text(
+                  'No tasks',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+                );
+              }
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
+                itemBuilder: (context, index) => CheckboxListTile(
+                  value: snapshot.data![index].status==TaskStatus.done,
+                  onChanged: (value) {},
+                  title: Text(snapshot.data![index].title),
+                  subtitle: Text(snapshot.data![index].description),
+                  controlAffinity: ListTileControlAffinity.leading,
+                ),
+              );
+            }
+            if (snapshot.hasError) {
+              return const Text(
+                'Some Error Occurred',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              );
+            }
+            return const CircularProgressIndicator();
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -71,35 +69,27 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         child: const Icon(Icons.add),
       ),
-      drawer: NavigationDrawer(
-        children: [
-          const DrawerHeader(
-              child: Align(
-                  child: Column(
+      drawer: const NavigationDrawer(children: [
+        DrawerHeader(
+            child: Align(
+          alignment: Alignment.center,
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
                 'Do It',
-                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold),
               ),
-              Text('finish all and enjoy')
+              Text(
+                'Finish all tasks and enjoy',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              )
             ],
-          ))),
-          ListTile(
-            onTap: () {},
-            // leading: const Icon(Icons),
-            title: const Text('Today'),
           ),
-          ListTile(
-            onTap: () {},
-            leading: const Icon(Icons.add),
-            title: const Text('Create List'),
-          ),
-          ListTile(
-            onTap: () {},
-          )
-        ],
-      ),
+        ))
+      ]),
     );
   }
 }
